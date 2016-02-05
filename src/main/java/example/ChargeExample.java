@@ -33,10 +33,20 @@ public class ChargeExample {
 	 * App ID get from Ping++ backend
 	 */
 	public static String appId = "app_PK00mDb1Oyv9zDiD";
+
+
+    private String channel;
+    private int amount;
+
+    public ChargeExample(String channel, int amount) {
+        Pingpp.apiKey = apiKey;
+        this.channel = channel;
+        this.amount = amount;
+    }
 	
     public static void main(String[] args) {
-        Pingpp.apiKey = apiKey;
-        ChargeExample ce = new ChargeExample();
+        ChargeExample ce = new ChargeExample("alipay", 100);
+
         System.out.println("---------creating transaction");
         Charge charge = ce.charge();
 
@@ -101,7 +111,13 @@ public class ChargeExample {
         Map<String, Object> chargeMap = new HashMap<String, Object>();
 
         // amount in cents
-        chargeMap.put("amount", 100);
+        chargeMap.put("amount", amount);
+
+        // payment method
+        //   Alipay: alipay
+        //   WeChat Pay: wx
+        //   UnionPay: upacp
+        chargeMap.put("channel", channel);
 
         // now, only "cny" is supported
         chargeMap.put("currency", "cny");
@@ -113,19 +129,15 @@ public class ChargeExample {
         // order description, should be less than 128 characters
         chargeMap.put("body", "Order Body");
 
-        // payment method
-        //   Alipay: alipay
-        //   WeChat Pay: wx
-        //   UnionPay: upacp
-        chargeMap.put("channel", "alipay");
 
-        // order number defined by app, same order number cannot be paid twice
+        // order number defined by the app
         // length limitation differs by payment method:
         //   alipay: 1-64 bytes
         //   wx: 1-32 bytes
         //   upacp: 8-40 bytes
         // recommended: 8-20 bytes, alphabet and numbers only
-        chargeMap.put("order_no", "123456789");
+        // we just use a unix timestamp as the order number in this demo
+        chargeMap.put("order_no", String.valueOf(System.currentTimeMillis()));
 
         // ip address of the client that starts the payment
         // I think this is for records only, so later you can find in ping++ backend who initiate the payment

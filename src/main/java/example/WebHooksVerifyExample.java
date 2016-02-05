@@ -102,4 +102,9 @@ public class WebHooksVerifyExample {
 		return signature.verify(sigBytes);
 	}
 
+	public static boolean verify(byte[] data, byte[] sigBytes) throws Exception {
+		return verifyData(data, sigBytes, getPubKey());
+	}
+
+
 }
