@@ -1,6 +1,7 @@
 package example;
 
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
@@ -46,7 +47,8 @@ public class WebHooksVerifyExample {
 	 * @throws Exception
 	 */
 	public static byte[] getByteFromFile(String file, boolean base64) throws Exception {
-		FileInputStream in = new FileInputStream(file);
+//		FileInputStream in = new FileInputStream(file);
+		InputStream in = WebHooksVerifyExample.class.getClassLoader().getResourceAsStream(file);
 		byte[] fileBytes = new byte[in.available()];
 		in.read(fileBytes);
 		in.close();
@@ -64,7 +66,8 @@ public class WebHooksVerifyExample {
 	 */
 	public static PublicKey getPubKey() throws Exception {
 		// read key bytes
-		FileInputStream in = new FileInputStream(filePath);
+//		FileInputStream in = new FileInputStream(filePath);
+		InputStream in = WebHooksVerifyExample.class.getClassLoader().getResourceAsStream(filePath);
 		byte[] keyBytes = new byte[in.available()];
 		in.read(keyBytes);
 		in.close();
